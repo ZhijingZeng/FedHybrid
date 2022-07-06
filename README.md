@@ -7,5 +7,5 @@ You can choose 'method' from {'FedHybrid', 'FedAvg', 'GIANT', 'DiSCO', 'DiSCO_pr
 
 Here is an example of running FedHybird. We remark that the stepsizes used in the code will be in the power of 2; that is, when the input is a, the stepsize used in the algorithm will be 2^a.
 ```
-python main.py --method 'FedHybird' --alpha1 0 --beta1 0 --alpha2 0 --beta2 0 --mu 0 --nsecond 8 --dataset 'Quadratic_Synthetic'
+python main.py --method FedHybrid --alpha1 0 --beta1 0 --alpha2 0 --beta2 0 --mu 0 --nsecond 8 --dataset Quadratic_Synthetic
 ```

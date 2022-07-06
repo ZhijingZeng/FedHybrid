@@ -45,7 +45,7 @@ def main(args):
 
         A, y, _, _, ndim = data_generator.run()
         args.ndim = ndim
-
+        
 
     if args.function == 'Quadratic':
         func = QuadraticCostFunc(A, y, gamma=args.gamma)
@@ -54,8 +54,9 @@ def main(args):
         func = LogisticCostFunc(A, y, gamma=args.gamma)
 
     # initial point
-    #initial_x = np.random.rand(args.ndim, 1)
-    initial_x = np.zeros([args.ndim, 1])
+    initial_x = np.random.rand(args.ndim, 1)
+    print('initial_x',initial_x)
+    #initial_x = np.zeros([args.ndim, 1])
     client_gradient = None
     client_Newton = None
 
@@ -75,10 +76,8 @@ def main(args):
     if args.method == 'FedHybrid':
         client_Newton = random.sample(range(args.nclient), args.nsecond) # clients that perform 2nd updates
         client_gradient = np.setdiff1d(range(args.nclient), client_Newton) # clients that perform 1st updates
-        client_gradient = [6]
         client_Newton = np.setdiff1d(range(args.nclient), client_gradient)
         print('client_gradient', client_gradient, 'client_Newton', client_Newton)
-
         method = FedHybrid(func, fn_star)
 
     if args.method == 'PN_DG':
@@ -100,7 +99,7 @@ def main(args):
         df = pd.DataFrame(fn_list)
         df.to_csv(args.dataset + '/Result/' + args.method + '_' + str(args.alpha1) + '_' + str(args.beta1) + '_' 
                     + str(args.alpha2) + '_' + str(args.beta2) + '_' + str(args.mu) + '_' + str(args.nsecond) + '_' + str(args.seed) + '_' + str(client_Newton) + '.csv')
-        print('k_iter', k_iter, 'fn_last', fn_list[-1])
+        
 
     if args.mode == "tune":
         tune_result = method.tune(param = TuneParam(alpha1_range=args.alpha1_range,
@@ -121,9 +120,9 @@ def main(args):
 if __name__ == '__main__':
     # parser start
     parser = argparse.ArgumentParser(description='PyTorch')
-
-    parser.add_argument('--dataset', type=str, default='Logistic_Mushroom') # 'Quadratic_Synthetic', 'Quadratic_Housing', 'Logistic_Synthetic', 'Logistic_Mushroom'
-    parser.add_argument('--function', type=str, default='Logistic') # 'Quadratic', 'Logistic'
+    
+    parser.add_argument('--dataset', type=str, default='Quadratic_Housing') # 'Quadratic_Synthetic', 'Quadratic_Housing', 'Logistic_Synthetic', 'Logistic_Mushroom'
+    parser.add_argument('--function', type=str, default='Quadratic') # 'Quadratic', 'Logistic'
 
     parser.add_argument('--nclient', type=int, default=8) # 10 for 'Quadratic_Synthetic' and 'Logistic_Synthetic', 8 for 'Quadratic_Housing' and 'Logistic_Mushroom'
     parser.add_argument('--ndim', type=int, default=12) # 3 for 'Quadratic_Synthetic', 12 for 'Logistic_Synthetic'
@@ -157,6 +156,4 @@ if __name__ == '__main__':
     parser.add_argument('--mu_range', nargs='+', type=int, default=None)
 
     args = parser.parse_args()
-    # parser end
-
     main(args)

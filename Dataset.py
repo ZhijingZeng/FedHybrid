@@ -1,4 +1,4 @@
-from curses import A_REVERSE
+
 import numpy as np
 import random
 
@@ -129,7 +129,7 @@ class QuadraticHousing:
         s = 0
         for j in range(self.nclient):
             indices_set[j] =  X_df_sorted['index'].to_list()[s:s+ni[j]]
-        s += ni[j]
+            s+= ni[j]
 
         A = [[] for _ in range(self.nclient)]
         y = [[] for _ in range(self.nclient)]
